@@ -2,6 +2,8 @@ package kimonik.com.gamedevelopment.customview;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,31 +15,40 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import kimonik.com.gamedevelopment.R;
+
 /**
  * Created by 12348 on 2017/6/10 0010.
  * game view
  */
 
-public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback2,Runnable{
+public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback2, Runnable {
     private SurfaceHolder surfaceHolder;
     private Paint paint;
-    private String TAG="surfaceview";
-    /**文本绘制的xy坐标位置*/
-    private int textX,textY;
+    private String TAG = "surfaceview";
+    /**
+     * 文本绘制的xy坐标位置
+     */
+    private int textX, textY;
     private Thread thread;
-    private boolean flag=true;
-    /**屏幕的宽高*/
-    private int screenW,screenH;
-    /**画布*/
+    private boolean flag = true;
+    /**
+     * 屏幕的宽高
+     */
+    private int screenW, screenH;
+    /**
+     * 画布
+     */
     private Canvas canvas;
+    private int count = 0;
 
 
     public GameSurfaceView(Context context) {
-        this(context, null,0);
+        this(context, null, 0);
     }
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public GameSurfaceView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -53,32 +64,41 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
 
     private void initView() {
-        this.surfaceHolder=this.getHolder();
+        this.surfaceHolder = this.getHolder();
         surfaceHolder.addCallback(this);
-        paint=new Paint();
+        paint = new Paint();
         paint.setColor(Color.parseColor("#a3a3a3"));
         paint.setTextSize(150f);
         paint.setAntiAlias(true);//设置无锯齿
-        paint.setStrokeWidth(10);//设置画笔粗细值
-        paint.setStyle(Paint.Style.FILL);//设置画笔是否填充
+        paint.setStrokeWidth(5);//设置画笔粗细值
+        paint.setStyle(Paint.Style.STROKE);//设置画笔是否填充
         setFocusable(true);//设置获取焦点
 
     }
-    /**在surfaceChanged执行后执行2次*/
+
+    /**
+     * 在surfaceChanged执行后执行2次
+     */
     @Override
     public void surfaceRedrawNeeded(SurfaceHolder holder) {
-        Log.e(TAG, "surfaceRedrawNeeded: ----------------------" );
+        Log.e(TAG, "surfaceRedrawNeeded: ----------------------");
 
     }
 
-    /**初始化view时,首先执行*/
+    /**
+     * 初始化view时,首先执行
+     */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.e(TAG, "surfaceCreated: ---------------------------" );
-        screenW=this.getWidth();
-        screenH=this.getHeight();
-        flag=true;
-        thread=new Thread(this);
+        Log.e(TAG, "surfaceCreated: ---------------------------");
+        screenW = this.getWidth();
+        screenH = this.getHeight();
+        Log.e(TAG, "surfaceCreated:--- " + screenW);
+        Log.e(TAG, "surfaceCreated:--- " + screenH);
+//        textY = screenH - 500;
+        textY = 0;
+        flag = true;
+        thread = new Thread(this);
         thread.start();
         drawContent();
 
@@ -86,65 +106,170 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private void drawContent() {
         try {
-            canvas=surfaceHolder.lockCanvas();
-            if (canvas!=null){
+            canvas = surfaceHolder.lockCanvas();
+            if (canvas != null) {
                 canvas.drawColor(Color.WHITE);
-                canvas.drawText("Game",textX,textY,paint);
+//                canvas.drawCircle(textX + 30, textY + 30, 30, paint);
+//                canvas.drawLine(textX + 30, textY + 60, textX + 30, textY + 120, paint);
+//                if (count % 3 == 1) {
+//                    canvas.drawLine(textX + 30, textY + 120, textX, textY + 180, paint);
+//                    canvas.drawLine(textX + 30, textY + 120, textX + 60, textY + 180, paint);
+//                    canvas.drawLine(textX + 30, textY + 80, textX + 60, textY + 150, paint);
+//                    canvas.drawLine(textX + 30, textY + 80, textX, textY + 150, paint);
+//                } else if (count % 3 == 0) {
+//                    canvas.drawLine(textX + 30, textY + 120, textX + 15, textY + 150, paint);//后腿
+//                    canvas.drawLine(textX + 15, textY + 150, textX, textY + 130, paint);//后腿
+//
+//                    canvas.drawLine(textX + 30, textY + 120, textX + 60, textY + 180, paint);//前腿
+//                    canvas.drawLine(textX + 30, textY + 80, textX + 60, textY + 150, paint);//前手臂
+//                    canvas.drawLine(textX + 30, textY + 80, textX, textY + 120, paint);//后手臂
+//                } else if (count % 3 == 2) {
+//                    canvas.drawLine(textX + 30, textY + 120, textX, textY + 180, paint);
+//
+//                    canvas.drawLine(textX + 30, textY + 120, textX + 60, textY + 150, paint);//前腿
+//                    canvas.drawLine(textX + 60, textY + 150, textX + 70, textY + 180, paint);//前腿
+//
+//                    canvas.drawLine(textX + 30, textY + 80, textX + 60, textY + 120, paint);//前手臂
+//                    canvas.drawLine(textX + 30, textY + 80, textX, textY + 150, paint);//后手臂
+//                }
+//                if (count%6==0){
+//                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu01);
+////                    canvas.drawBitmap(bitmap,0,0,paint);
+//                    canvas.drawBitmap(bitmap,textX,textY,paint);
+//                }else if (count%6==1){
+//                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu02);
+//                    canvas.drawBitmap(bitmap,textX,textY,paint);
+//                }else if (count%6==2){
+//                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu03);
+//                    canvas.drawBitmap(bitmap,textX,textY,paint);
+//                }else if (count%6==3){
+//                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu04);
+//                    canvas.drawBitmap(bitmap,textX,textY,paint);
+//                }else if (count%6==4){
+//                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu05);
+//                    canvas.drawBitmap(bitmap,textX,textY,paint);
+//                }else if (count%6==5){
+//                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu06);
+//                    canvas.drawBitmap(bitmap,textX,textY,paint);
+//                }
 
-                canvas.drawPoint(100,100,paint);
-                canvas.drawPoints(new float[]{100,100,120,120},paint);
-                canvas.drawLine(100,80,70,150,paint);
-                canvas.drawLines(new float[]{100,80,70,150,150,90,250,170},paint);
-                canvas.drawRect(10,60,40,100,paint);
+                Log.e(TAG, "drawContent: "+textX );
+                Log.e(TAG, "drawContent: "+textY );
 
-                Path path=new Path();
-//                path.moveTo(0,0);
-//                path.lineTo(500,500);
-//                path.lineTo(300,800);
-                path.addCircle(500,500,500,Path.Direction.CW);//ccw--字符顶部在圆内,cw---字符顶部在圆外
-                canvas.drawTextOnPath("hfdsfgdfhjfhsjdfhdhfjdfhdjnfdjskfjdhnfkhgfhsghfgdfgfgssfgsfdgsdggfgfsgdgddjfkjfewjfeihfnkjdfndsjkfnh",path,0,0,paint);
+                if (count%6==0){
+                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu01);
+//                    canvas.drawBitmap(bitmap,0,0,paint);
+                    canvas.drawBitmap(bitmap,textX,textY,paint);
+                }else if (count%6==1){
+                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu02);
+                    canvas.drawBitmap(bitmap,textX,textY,paint);
+                }else if (count%6==2){
+                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu03);
+                    Log.e(TAG, "drawContentgetWidth: "+bitmap.getWidth() );
+                    Log.e(TAG, "drawContentgetHeight: "+bitmap.getHeight() );
+                    Log.e(TAG, "getPixel: "+bitmap.getPixel(450,450) );
+                    int[] pointInfo=new int[bitmap.getWidth()*bitmap.getHeight()];
+                    bitmap.getPixels(pointInfo,0,bitmap.getWidth(),0,0,bitmap.getWidth(),bitmap.getHeight());
+                    for (int i = 0; i < pointInfo.length; i++) {
+                        if (pointInfo[i]!=0)
+                        Log.e(TAG, "drawContent:---232---- "+pointInfo[i] );
+
+                    }
+
+                    canvas.drawBitmap(bitmap,textX,textY,paint);
+                }else if (count%6==3){
+                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu04);
+                    canvas.drawBitmap(bitmap,textX,textY,paint);
+                }else if (count%6==4){
+                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu05);
+                    canvas.drawBitmap(bitmap,textX,textY,paint);
+                }else if (count%6==5){
+                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu06);
+                    canvas.drawBitmap(bitmap,textX,textY,paint);
+                }
+
+
+
+//                Path path=new Path();
+//                path.moveTo(textX+30,textY+60);
+//                path.lineTo(textX+30,textY+120);
+//                path.lineTo(textX+15,textY+180);
+//                canvas.drawPath(path,paint);
+//
+//                Path path1=new Path();
+//                path1.moveTo(textX+30,textY+120);
+//                path1.lineTo(textX+45,textY+180);
+//                canvas.drawPath(path1,paint);
+
+//                canvas.drawText("Game",textX,textY,paint);
+//
+//                canvas.drawPoint(100,100,paint);
+//                canvas.drawPoints(new float[]{100,100,120,120},paint);
+//                canvas.drawLine(100,80,70,150,paint);
+//                canvas.drawLines(new float[]{100,80,70,150,150,90,250,170},paint);
+//                canvas.drawRect(10,60,40,100,paint);
+//
+//                Path path=new Path();
+////                path.moveTo(0,0);
+////                path.lineTo(500,500);
+////                path.lineTo(300,800);
+//                path.addCircle(500,500,500,Path.Direction.CW);//ccw--字符顶部在圆内,cw---字符顶部在圆外
+//                canvas.drawTextOnPath("hfdsfgdfhjfhsjdfhdhfjdfhdjnfdjskfjdhnfkhgfhsghfgdfgfgssfgsfdgsdggfgfsgdgddjfkjfewjfeihfnkjdfndsjkfnh",path,0,0,paint);
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if (canvas!=null){
+        } finally {
+            if (canvas != null) {
                 surfaceHolder.unlockCanvasAndPost(canvas);
             }
         }
 
     }
-    /**在surfaceCreated后执行*/
+
+    /**
+     * 在surfaceCreated后执行
+     */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.e(TAG, "surfaceChanged: -----------------------" );
+        Log.e(TAG, "surfaceChanged: -----------------------");
 
     }
-    /**销毁时执行*/
+
+    /**
+     * 销毁时执行
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        flag=false;//销毁时终止线程
-        Log.e(TAG, "surfaceDestroyed: -----------------------" );
+        flag = false;//销毁时终止线程
+        Log.e(TAG, "surfaceDestroyed: -----------------------");
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        textX= (int) event.getX()-175;
-        textY= (int) event.getY()+75;
+        textX = (int) event.getX() - 175;
+        textY = (int) event.getY() + 75;
 //        drawContent();
-        Log.e(TAG, "onTouchEvent: ------------------eee" );
+        Log.e(TAG, "onTouchEvent: ------------------eee");
         return true;
     }
 
     @Override
     public void run() {
-        while (flag){
-            long start= System.currentTimeMillis();
+        while (flag) {
+            count++;
+            if (textX > 1920) {
+                textX = 0;
+            }
+            textX = textX + 10;
+//            textY=textY+5;
+
+            long start = System.currentTimeMillis();
             drawContent();
-            long end=System.currentTimeMillis();
-            if (end-start<50){
+            long end = System.currentTimeMillis();
+            if (end - start < 3000) {
                 try {
-                    Thread.sleep(50-end+start);
+                    Thread.sleep(3000 - end + start);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
