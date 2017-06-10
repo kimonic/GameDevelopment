@@ -99,7 +99,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         textY = 0;
         flag = true;
         thread = new Thread(this);
-        thread.start();
+//        thread.start();
         drawContent();
 
     }
@@ -153,41 +153,106 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 //                    canvas.drawBitmap(bitmap,textX,textY,paint);
 //                }
 
-                Log.e(TAG, "drawContent: "+textX );
-                Log.e(TAG, "drawContent: "+textY );
+                Log.e(TAG, "drawContent: " + textX);
+                Log.e(TAG, "drawContent: " + textY);
 
-                if (count%6==0){
-                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu01);
-//                    canvas.drawBitmap(bitmap,0,0,paint);
-                    canvas.drawBitmap(bitmap,textX,textY,paint);
-                }else if (count%6==1){
-                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu02);
-                    canvas.drawBitmap(bitmap,textX,textY,paint);
-                }else if (count%6==2){
-                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu03);
-                    Log.e(TAG, "drawContentgetWidth: "+bitmap.getWidth() );
-                    Log.e(TAG, "drawContentgetHeight: "+bitmap.getHeight() );
-                    Log.e(TAG, "getPixel: "+bitmap.getPixel(450,450) );
+
+                Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.yu03);
+                Bitmap bitmap1=Bitmap.createBitmap(bitmap.getWidth(),bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+//                Log.e(TAG, "drawContentgetWidth: " + bitmap.getWidth());
+//                Log.e(TAG, "drawContentgetHeight: " + bitmap.getHeight());
+//                Log.e(TAG, "getPixel: " + bitmap.getPixel(450, 450));
                     int[] pointInfo=new int[bitmap.getWidth()*bitmap.getHeight()];
                     bitmap.getPixels(pointInfo,0,bitmap.getWidth(),0,0,bitmap.getWidth(),bitmap.getHeight());
-                    for (int i = 0; i < pointInfo.length; i++) {
-                        if (pointInfo[i]!=0)
-                        Log.e(TAG, "drawContent:---232---- "+pointInfo[i] );
+                Log.e(TAG, "drawContent:已来了 "+pointInfo.length );
+//                for (int i = 0; i < 600; i++) {
+////                    if (i%900>400&&i%900<600&&i>400*900&&i<600*900){
+////                        pointInfo[i]=Color.BLUE;
+////                    }
+//                    //位图的像素点信息数组存储俺行顺序记录,某一个像素点的位置计算在数组中的下表为
+//                    //在数组中的位置=行数*单行像素的个数+在当前航的横轴坐标位置
+//                    if (i>400){
+//                        int m=0;
+//                        while (m<200){
+//                            m++;
+//                            Log.e(TAG, "drawContent: "+(400*i+m) );
+//                            pointInfo[i*900+400+m]=Color.BLUE;
+//                        }
+//                    }
+//                }
+                for (int i = 0; i < pointInfo.length; i++) {
+                    if (pointInfo[i]!=0){
+                        if (i%3==0){
+                            pointInfo[i]=Color.BLUE;
 
+                        }else if (i%3==1){
+                            pointInfo[i]=Color.GREEN;
+
+                        }else if (i%3==2){
+                            pointInfo[i]=Color.RED;
+
+                        }
                     }
-
-                    canvas.drawBitmap(bitmap,textX,textY,paint);
-                }else if (count%6==3){
-                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu04);
-                    canvas.drawBitmap(bitmap,textX,textY,paint);
-                }else if (count%6==4){
-                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu05);
-                    canvas.drawBitmap(bitmap,textX,textY,paint);
-                }else if (count%6==5){
-                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu06);
-                    canvas.drawBitmap(bitmap,textX,textY,paint);
                 }
 
+
+//                    }
+
+//                    if (i > 400) {
+//                        Log.e(TAG, "drawContent:循环1 " );
+//                        for (int j = 0; j < 600; j++) {
+//                            Log.e(TAG, "drawContent:循环2 " );
+//                            if (j > 400) {
+//                                Log.e(TAG, "drawContent:执行前 " );
+//                                pointInfo[i*j]= Color.BLUE;
+//                                Log.e(TAG, "drawContent:在执行 " +j);
+//                            }
+//                        }
+//                    }
+//                }
+                Log.e(TAG, "drawContent:已完成----------- " );
+
+                bitmap1.setPixels(pointInfo,0,bitmap.getWidth(),0,0,bitmap.getWidth(),bitmap.getHeight());
+                Log.e(TAG, "drawContent:已完成 " );
+                canvas.drawBitmap(bitmap1, 0, 0, paint);
+
+//                if (count%6==0){
+//                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu01);
+////                    canvas.drawBitmap(bitmap,0,0,paint);
+//                    canvas.drawBitmap(bitmap,textX,textY,paint);
+//                }else if (count%6==1){
+//                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu02);
+//                    canvas.drawBitmap(bitmap,textX,textY,paint);
+//                }else if (count%6==2){
+//                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu03);
+//                    Log.e(TAG, "drawContentgetWidth: "+bitmap.getWidth() );
+//                    Log.e(TAG, "drawContentgetHeight: "+bitmap.getHeight() );
+//                    Log.e(TAG, "getPixel: "+bitmap.getPixel(450,450) );
+////                    int[] pointInfo=new int[bitmap.getWidth()*bitmap.getHeight()];
+////                    bitmap.getPixels(pointInfo,0,bitmap.getWidth(),0,0,bitmap.getWidth(),bitmap.getHeight());
+//
+//                    for (int i = 0; i < 500; i++) {
+//                       if (i>400){
+//                           for (int j = 0; j < 500; j++) {
+//                               if (j>400){
+//                                   bitmap.setPixel(i,j,Color.BLUE);
+//                               }
+//                           }
+//                       }
+//
+//                    }
+//
+//                    canvas.drawBitmap(bitmap,textX,textY,paint);
+//                }else if (count%6==3){
+//                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu04);
+//                    canvas.drawBitmap(bitmap,textX,textY,paint);
+//                }else if (count%6==4){
+//                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu05);
+//                    canvas.drawBitmap(bitmap,textX,textY,paint);
+//                }else if (count%6==5){
+//                    Bitmap bitmap= BitmapFactory.decodeResource(this.getResources(), R.drawable.yu06);
+//                    canvas.drawBitmap(bitmap,textX,textY,paint);
+//                }
 
 
 //                Path path=new Path();
